@@ -1,6 +1,6 @@
 <?php
-include_once 'database/db_connect.php';
-include_once 'sql/loginMapper';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/Web-Security/database/db_connect.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/Web-Security/sql/loginMapper.php';
 sec_session_start();
 
 ?>
@@ -19,10 +19,10 @@ sec_session_start();
     <script type="text/JavaScript" src="js/login_form.js"></script>
     
     <!-- Bootstrap core CSS -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="../css/signin.css" rel="stylesheet">
+    <link href="css/signin.css" rel="stylesheet">
 
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -39,18 +39,18 @@ sec_session_start();
 
     <div class="container">
 
-        <form class="form-signin" role="form" action="functions/login.php" method="post" name="login_form">
+        <form class="form-signin" role="form" action="functions/login.php" method="post">
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="mail" class="form-control" placeholder="Email address" required autofocus>
+        <input type="email" id="mail" class="form-control" name="username" placeholder="Email address" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="password" class="form-control" placeholder="Password" required>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
         <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
-        <input type="button" value="Login" onclick="formhash(this.form, this.form.password);" />
+        <input class="btn btn-lg btn-primary btn-block" type="button" value="Login" onclick="formhash(this.form, this.form.password);" />
       </form>
 
     </div> <!-- /container -->

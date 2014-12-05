@@ -1,5 +1,5 @@
 <?php
-include_once '../config/secure_session.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/Web-Security/config/secure_session.php';
 sec_session_start();
  
 // delete vars in session

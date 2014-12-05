@@ -1,5 +1,4 @@
 <?php
-include 'config.php';
 //secure session, so hackers can't get access to the data we save in them
 function sec_session_start() {
     $session_name = 'sec_session';   // name of the session

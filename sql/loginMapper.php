@@ -1,6 +1,5 @@
 <?php
-include_once '../config/config.php';
-include_once '../config/secure_session.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/Web-Security/config/secure_session.php';
 //login method with prepare statement and check agains bruteforce
 function login($username, $password, $mysqli) {
     if($stmt = $mysqli->prepare("SELECT userID, firstname FROM users WHERE username = ? AND password = ?"))

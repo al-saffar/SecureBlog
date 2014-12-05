@@ -1,6 +1,6 @@
 <?php
-include_once '../database/db_connect.php';
-include_once '../sql/loginMapper.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/Web-Security/database/db_connect.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/Web-Security/sql/loginMapper.php';
  
 sec_session_start(); // start secure session
  
@@ -14,7 +14,7 @@ if (isset($_POST['username'], $_POST['p'])) {
     //try to login
     if (login($username, $password, $mysqli) == true) {
         // if logget in go to next page
-        header('Location: ../profile.php');
+        header('Location: ../blog.php');
     } else {
         // else go to frontpage
         header('Location: ../index.php?error=1');
