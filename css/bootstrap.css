@@ -4741,6 +4741,8 @@ a.thumbnail.active {
   color: #8a6d3b;
   background-color: #fcf8e3;
   border-color: #faebcc;
+  text-align:center;
+  padding:10px;
 }
 .alert-warning hr {
   border-top-color: #f7e1b5;

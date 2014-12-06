@@ -33,17 +33,22 @@ sec_session_start();
   </head>
 
   <body>
-        <?php
-        // put your code here
-        ?>
-
+    <?php 
+    if(isset($_GET['error']) && $_GET['error'] == 1)
+    {
+    ?>
+      <div class="alert-warning"><label>Wrong e-mail or password entered, please try again!</label></div>
+    <?php 
+    }
+    ?>
+    
     <div class="container">
 
         <form class="form-signin" role="form" action="functions/login.php" method="post">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="mail" class="form-control" name="username" placeholder="Email address" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
+        <label for="mail" class="sr-only">Email address</label>
+        <input type="email" id="mail" class="form-control" name="mail" placeholder="Email address" required autofocus>
+        <label for="mail" class="sr-only">Password</label>
         <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
         <div class="checkbox">
           <label>
@@ -51,12 +56,12 @@ sec_session_start();
           </label>
         </div>
         <input class="btn btn-lg btn-primary btn-block" type="button" value="Login" onclick="formhash(this.form, this.form.password);" />
-      </form>
+        </form>
 
     </div> <!-- /container -->
 
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>

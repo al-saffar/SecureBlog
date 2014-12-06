@@ -3,14 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/SecureBlog/css/blog.css</file>
-            <file>file:/C:/xampp/htdocs/SecureBlog/js/main.js</file>
-            <file>file:/C:/xampp/htdocs/SecureBlog/views/index.php</file>
-            <file>file:/C:/xampp/htdocs/SecureBlog/css/bootstrap.min.css</file>
-            <file>file:/C:/xampp/htdocs/SecureBlog/css/dashboard.css</file>
-            <file>file:/C:/xampp/htdocs/SecureBlog/views/blog.php</file>
-            <file>file:/C:/xampp/htdocs/SecureBlog/css/signin.css</file>
-            <file>file:/C:/xampp/htdocs/SecureBlog/views/adminDashboard.php</file>
+            <file>file:/C:/xampp/htdocs/Web-Security/config/config.php</file>
+            <file>file:/C:/xampp/htdocs/Web-Security/sql/adminMapper.php</file>
+            <file>file:/C:/xampp/htdocs/Web-Security/functions/login.php</file>
+            <file>file:/C:/xampp/htdocs/Web-Security/index.php</file>
+            <file>file:/C:/xampp/htdocs/Web-Security/functions/logout.php</file>
+            <file>file:/C:/xampp/htdocs/Web-Security/sql/loginMapper.php</file>
+            <file>file:/C:/xampp/htdocs/Web-Security/config/secure_session.php</file>
+            <file>file:/C:/xampp/htdocs/Web-Security/css/signin.css</file>
+            <file>file:/C:/xampp/htdocs/Web-Security/blog.php</file>
+            <file>file:/C:/xampp/htdocs/Web-Security/database/db_connect.php</file>
         </group>
     </open-files>
 </project-private>

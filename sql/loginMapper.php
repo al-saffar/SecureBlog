@@ -1,21 +1,31 @@
 <?php
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/Web-Security/config/secure_session.php';
 //login method with prepare statement and check agains bruteforce
-function login($username, $password, $mysqli) {
-    if($stmt = $mysqli->prepare("SELECT userID, firstname FROM users WHERE username = ? AND password = ?"))
+function login($mail, $password, $mysqli) {
+    $type = -1;
+    if($stmt = $mysqli->prepare("SELECT id, firstname, lastname, type FROM users WHERE id = (SELECT user_id FROM prvlg WHERE email = ? AND www = ?)"))
     {
-        $stmt->bind_param('ss', $username, $password);
+        $stmt->bind_param('ss', $mail, $password);
         $stmt->execute();
         $stmt->store_result();
         
-        $stmt->bind_result($userID, $firstname);
+        $stmt->bind_result($userID, $firstname, $lastname, $type);
         $stmt->fetch();
+        
+        //get IP
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
         
         if($stmt->num_rows == 1)
         {
-            if(checkbrute($ip, $username, $mysqli) == true)
+            if(checkbrute($ip, $mail, $mysqli) == true)
             {
-                return false;
+                return -1;
             }
             else
             {
@@ -24,50 +34,47 @@ function login($username, $password, $mysqli) {
                 
                 // make sure it only contains numbers
                 $userID = preg_replace("/[^0-9]+/", "", $userID);
-
                 $_SESSION['userID'] = $userID; //save id into session
+                
+                // make sure it only contains numbers
+                $type = preg_replace("/[^0-9]+/", "", $type);
+                $_SESSION['type'] = $type; //save it into session
                 
                 // make sure it only contains letters and -
                 $firstname = preg_replace("/[^a-zA-Z\-]+/", "", $firstname);
-
                 $_SESSION['firstname'] = $firstname; //save in session
+                
+                // make sure it only contains letters and -
+                $lastname = preg_replace("/[^a-zA-Z\-]+/", "", $lastname);
+                $_SESSION['lastname'] = $lastname; //save in session
                 
                 $_SESSION['login_string'] = hash('sha512', $password . $user_browser); //generate a login_string(Hashed), so we can check if he is logged in(against session hijacking)
 
                 // login successful.
-                return true;
+                return $type;
             }
         }
         else {
             // password is not correct and save login attempts on db, to protect against bruteforce
             $now = time(); //get current time in seconds
             
-            //get IP
-            if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-                $ip = $_SERVER['HTTP_CLIENT_IP'];
-            } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            } else {
-                $ip = $_SERVER['REMOTE_ADDR'];
-            }
-            
-            $mysqli->query("INSERT INTO login_attempts(IP, username, time)
-                            VALUES ('$ip', '$username' , '$now')");
-            return false;
+            $mysqli->query("INSERT INTO login_attempts(ip, email, time)
+                            VALUES ('$ip', '$mail' , '$now')");
+            return -1;
         }
     }
 }
 
 //check if bruteforcing is happening and decline access
-function checkbrute($ip, $username, $mysqli) {
+function checkbrute($ip, $mail, $mysqli) {
     // get current time in secs
     $now = time();
  
     // block in 5 min
-    $valid_attempts = $now - (5 * 60);
+    $valid_attempts = $now - (30 * 60);
  
-    if ($stmt = $mysqli->prepare("SELECT time FROM login_attempts WHERE ip = ? AND username = ? AND time > '$valid_attempts'")) {
-        $stmt->bind_param('ss', $ip, $username);
+    if ($stmt = $mysqli->prepare("SELECT time FROM login_attempts WHERE ip = ? AND mail = ? AND time > '$valid_attempts'")) {
+        $stmt->bind_param('ss', $ip, $mail);
  
         $stmt->execute();
         $stmt->store_result();
@@ -85,18 +92,17 @@ function checkbrute($ip, $username, $mysqli) {
 function login_check($mysqli) {
     
     //are the session variables set
-    if (isset($_SESSION['userID'], $_SESSION['firstname'], $_SESSION['login_string'])) {
+    if (isset($_SESSION['userID'], $_SESSION['login_string'])) {
  
         //get them
         $userID = $_SESSION['userID'];
         $login_string = $_SESSION['login_string'];
-        $firstname = $_SESSION['firstname'];
  
         // get browser
         $user_browser = $_SERVER['HTTP_USER_AGENT'];
  
         //get password for that user
-        if ($stmt = $mysqli->prepare("SELECT password FROM users WHERE userID = ? LIMIT 1")) {
+        if ($stmt = $mysqli->prepare("SELECT www FROM prvlg WHERE userID = ? LIMIT 1")) {
            
             $stmt->bind_param('i', $userID);
             $stmt->execute(); 
