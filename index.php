@@ -56,7 +56,7 @@ sec_session_start();
         </div>
         <input class="btn btn-lg btn-primary btn-block" type="button" value="Login" onclick="formhash(this.form, this.form.password);" />
         </form>
-        
+        <!--
         <div style="position:relative;margin:auto auto;width:500px;height:460px; top:-140px; text-align:center;background:#d9d9d9;border: 1px solid #c0c0c0;">
             
             <form class="form-register" role="form" action="functions/login.php" method="post">
@@ -102,7 +102,7 @@ sec_session_start();
                 <input class="btn btn-lg btn-primary btn-block" style="margin-top:15px;" type="button" value="Register" onclick="formhash(this.form, this.form.password);" />
             </form>
             
-        </div>
+        </div> -->
     </div> <!-- /container -->
 
 
