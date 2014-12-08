@@ -1,6 +1,6 @@
 <?php
-include_once ''.$_SERVER['DOCUMENT_ROOT'].'/Web-Security/database/db_connect.php';
-include_once ''.$_SERVER['DOCUMENT_ROOT'].'/Web-Security/sql/loginMapper.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/database/db_connect.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/sql/loginMapper.php';
  
 sec_session_start(); // start secure session
  
