@@ -3,16 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/Web-Security/config/config.php</file>
-            <file>file:/C:/xampp/htdocs/Web-Security/css/bootstrap.css</file>
-            <file>file:/C:/xampp/htdocs/Web-Security/index.php</file>
-            <file>file:/C:/xampp/htdocs/Web-Security/functions/login.php</file>
-            <file>file:/C:/xampp/htdocs/Web-Security/adminDashboard.php</file>
-            <file>file:/C:/xampp/htdocs/Web-Security/sql/loginMapper.php</file>
-            <file>file:/C:/xampp/htdocs/Web-Security/css/forms.css</file>
-            <file>file:/C:/xampp/htdocs/Web-Security/blog.php</file>
-            <file>file:/C:/xampp/htdocs/Web-Security/js/login_form.js</file>
-            <file>file:/C:/xampp/htdocs/Web-Security/database/db_connect.php</file>
+            <file>file:/C:/xampp/htdocs/SecureBlog/css/blog.css</file>
+            <file>file:/C:/xampp/htdocs/SecureBlog/admin/adminDashboard.php</file>
+            <file>file:/C:/xampp/htdocs/SecureBlog/admin/my.php</file>
+            <file>file:/C:/xampp/htdocs/SecureBlog/js/main.js</file>
+            <file>file:/C:/xampp/htdocs/SecureBlog/css/admin-forms.css</file>
+            <file>file:/C:/xampp/htdocs/SecureBlog/css/bootstrap.min.css</file>
+            <file>file:/C:/xampp/htdocs/SecureBlog/css/dashboard.css</file>
+            <file>file:/C:/xampp/htdocs/SecureBlog/css/forms.css</file>
         </group>
     </open-files>
 </project-private>
