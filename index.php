@@ -109,4 +109,17 @@ sec_session_start();
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
+  
+  <script type="text/javascript">
+		function displayPopUp() {
+			document.getElementById("createUser").style.display = "block";
+			document.getElementById("fadeOn").style.display = "block";
+
+		}
+		function closePopUp() {
+			document.getElementById("createUser").style.display = "none";
+			document.getElementById("fadeOn").style.display = "none";
+		}
+  
+  
 </html>
