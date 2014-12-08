@@ -14,7 +14,7 @@ sec_session_start();
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
     
-    <title>Secure Blog</title>
+    <title>Secureddd Blog</title>
     <script type="text/JavaScript" src="js/sha512.js"></script> 
     <script type="text/JavaScript" src="js/login_form.js"></script>
     
