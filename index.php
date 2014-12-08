@@ -121,5 +121,5 @@ sec_session_start();
 			document.getElementById("fadeOn").style.display = "none";
 		}
   
-  
+  </script>
 </html>
