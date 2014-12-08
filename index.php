@@ -2,7 +2,7 @@
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/Web-Security/database/db_connect.php';
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/Web-Security/sql/loginMapper.php';
 sec_session_start();
-
+//hekki
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +13,7 @@ sec_session_start();
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
-
+    
     <title>Secure Blog</title>
     <script type="text/JavaScript" src="js/sha512.js"></script> 
     <script type="text/JavaScript" src="js/login_form.js"></script>
