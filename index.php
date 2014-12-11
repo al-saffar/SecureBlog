@@ -1,5 +1,6 @@
 <?php
-require_once ('./config/autoLoader.php');
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/database/db_connect.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/sql/loginMapper.php';
 sec_session_start();
 ?>
 <!DOCTYPE html>
