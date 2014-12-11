@@ -1,5 +1,5 @@
 <?php
-include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/config/secure_session.php';
+require_once ('./config/autoLoader.php');
 //login method with prepare statement and check agains bruteforce
 function login($mail, $password, $mysqli) {
     $type = -1;
