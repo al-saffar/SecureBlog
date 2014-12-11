@@ -16,7 +16,7 @@ sec_session_start();
     <title>Secure Blog</title>
     <script type="text/JavaScript" src="js/sha512.js"></script> 
     <script type="text/JavaScript" src="js/login_form.js"></script>
-    
+    <script type="text/JavaScript" src="js/register_form.js"></script>
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
@@ -33,14 +33,25 @@ sec_session_start();
 
   <body>
     <?php 
-    if(isset($_GET['error']) && $_GET['error'] == 1)
+    if(isset($_GET['error']))
     {
-    ?>
-      <div class="alert-warning"><label>Wrong e-mail or password entered, please try again!</label></div>
-    <?php 
+        if($_GET['error'] == 1)
+        {
+            echo "<div class='alert-warning'><label>Wrong e-mail or password entered, please try again!</label></div>";
+        }
+        else if($_GET['error'] == 2)
+        {
+            echo "<div class='alert-warning'><label>An error happened during registation. Please try again later.</label></div>";
+        }
+    }
+    else if(isset($_GET['success']))
+    {
+        if($_GET['success'] == 1)
+        {
+            echo "<div class='alert-success'><label>Succesfully registered. You can now login!</label></div>";
+        }
     }
     ?>
-    
     <div class="container">
 
         <form class="form-signin" role="form" action="functions/login.php" method="post">
@@ -55,30 +66,35 @@ sec_session_start();
           </label>
         </div>
         <input class="btn btn-lg btn-primary btn-block" type="button" value="Login" onclick="formhash(this.form, this.form.password);" />
+        <input class="btn btn-lg btn-primary btn-block" type="button" value="Register" onclick="displayPopUp()" />
         </form>
-        <!--
-        <div style="position:relative;margin:auto auto;width:500px;height:460px; top:-140px; text-align:center;background:#d9d9d9;border: 1px solid #c0c0c0;">
+        
+        
+    </div> <!-- /container -->
+    <div id="fade" style="display:none;" onclick="closePopUp();"></div>
+    <div id="regUser" style="position:relative;margin:auto auto;width:500px;height:460px; top:-250px; text-align:center;background:#d9d9d9;border: 1px solid #c0c0c0;display:none">
             
-            <form class="form-register" role="form" action="functions/login.php" method="post">
+            <form class="form-register" role="form" action="functions/register.php" method="post">
                 <h2 class="">Register on Secure Blog!</h2>
                 
-                <div style="display:table; width:100%;">
-                <input type="text" id="firstname" name="firstname" style="width:50%;display:table-cell;" class="form-control" placeholder="Firstname" required>
+                <div id="name" style="display:table; width:100%;">
+                <label for="firstname" class="sr-only">Firstname</label>
+                <input type="text" id="firstname" name="firstname" style="width:50%;display:table-cell;" class="form-control" placeholder="Firstname" required autofocus>
                 <input type="text" id="lastname" name="lastname" style="width:50%;display:table-cell;" class="form-control" placeholder="Lastname" required>
                 </div>
                 
                 <label for="mail" class="sr-only">Email address</label>
-                <input type="email" id="mail" class="form-control" name="mail" placeholder="Email address" required autofocus>
+                <input type="email" id="mail" class="form-control" name="mail" placeholder="Email address" required>
                 
                 <label for="password" class="sr-only">Password</label>
                 <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
                 <label for="passwordAgain" class="sr-only">Password again</label>
-                <input type="password" id="password" name="passwordAgain" class="form-control" placeholder="Password Again" required>
+                <input type="password" id="passwordAgain" name="passwordAgain" class="form-control" placeholder="Password Again" required>
                 
-                <div style="margin-top:15px;display:table;">
-                    <input type="number" id="age" name="age" style="width:20%;display:table-cell;float:left" class="form-control" placeholder="Age" required>
+                <div style="margin-top:15px;display:table;width:100%">
+                    <input type="date" id="dob" name="dob" style="width:50%;height:42px;display:table-cell;float:left" class="form-control" required>
                 
-                    <select style="display:table-cell;width:45%;position:relative;left:-25px;">
+                    <select id="gender" style="display:table-cell;width:50%;float:right;">
                         <option value="0" style="color:grey;">Choose Gender</option>
                         <option value="1">Male</option>
                         <option value="2">Female</option>
@@ -92,19 +108,17 @@ sec_session_start();
                         <option value="2">Germany</option>
                     </select>
                 
-                    <select style="display:table-cell;width:50%;">
+                    <select id="city" style="display:table-cell;width:50%;">
                         <option value="0" style="color:grey;">City</option>
                         <option value="1">Frederikssund</option>
                         <option value="2">København</option>
                     </select>
                 </div>
                 
-                <input class="btn btn-lg btn-primary btn-block" style="margin-top:15px;" type="button" value="Register" onclick="formhash(this.form, this.form.password);" />
+                <input class="btn btn-lg btn-primary btn-block" style="margin-top:15px;" type="button" value="Register" onclick="registerFormCheck(this.form, this.form.firstname, this.form.lastname, this.form.mail, this.form.password, this.form.passwordAgain, this.form.dob, this.form.gender, this.form.city);" />
             </form>
             
-        </div> -->
-    </div> <!-- /container -->
-
+        </div>
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
@@ -112,13 +126,12 @@ sec_session_start();
   
   <script type="text/javascript">
 		function displayPopUp() {
-			document.getElementById("createUser").style.display = "block";
-			document.getElementById("fadeOn").style.display = "block";
-
+			document.getElementById("regUser").style.display = "block";
+			document.getElementById("fade").style.display = "block";
 		}
 		function closePopUp() {
-			document.getElementById("createUser").style.display = "none";
-			document.getElementById("fadeOn").style.display = "none";
+			document.getElementById("regUser").style.display = "none";
+			document.getElementById("fade").style.display = "none";
 		}
   
   </script>
