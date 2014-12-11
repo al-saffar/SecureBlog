@@ -1,5 +1,5 @@
 <?php
-require_once ('./config/autoLoader.php');
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
