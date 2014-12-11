@@ -6,12 +6,11 @@ function formhash(form, password) {
     //add the input tag to the form
     form.appendChild(p);
     
-    p.name = "p"; //name it p
+    p.name = "token"; //name it p
     p.type = "hidden"; //make it hidden
     p.value = hex_sha512(password.value); //make the value the hashed password
  
-    //delete the plain text password
-    password.value = "";
+    password.value = hex_sha512("thepasswordissecret");
  
     // submit the form
     form.submit();

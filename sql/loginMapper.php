@@ -4,7 +4,7 @@ include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/config/secure_session.php
 //login method with prepare statement and check agains bruteforce
 function login($mail, $password, $mysqli) {
     $type = -1;
-    if($stmt = $mysqli->prepare("SELECT id, firstname, lastname, type FROM users WHERE id = (SELECT user_id FROM prvlg WHERE email = ? AND www = ?)"))
+    if($stmt = $mysqli->prepare("SELECT u.id, u.firstname, u.lastname, u.type FROM users u, prvlg p WHERE u.id = p.user_id AND u.email = ? AND p.www = ?;"))
     {
         $stmt->bind_param('ss', $mail, $password);
         $stmt->execute();

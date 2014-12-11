@@ -4,25 +4,18 @@ include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/sql/loginMapper.php';
 sec_session_start(); // start secure session
  
 //if username and password set
-if (isset($_POST['mail'], $_POST['p'])) {
+if (isset($_POST['mail'], $_POST['token'])) {
     
     //save in vars
     $mail = $_POST['mail'];
-    $password = $_POST['p'];
-    
+    $password = $_POST['token'];
+    $pass = hash("SHA512", $password.$mail);
     //try to login
-    if (login($mail, $password, $mysqli) > -1) {
+    if (login($mail, $pass, $mysqli) > -1) {
         // if logget in go to next page
-        if(isset($_SESSION['type']))
+        if(isset($_SESSION['type']) && $_SESSION['type'] == 1)
         {
-            if($_SESSION['type'] == 1)
-            {
-                header('Location: ../blog.php');
-            }
-            else if($_SESSION['type'] == 2)
-            {
-                header('Location: ../adminDashboard.php');
-            }
+            header('Location: ../blog.php');
         }
         else
         {

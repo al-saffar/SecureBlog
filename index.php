@@ -65,7 +65,7 @@ sec_session_start();
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
-        <input class="btn btn-lg btn-primary btn-block" type="button" value="Login" onclick="formhash(this.form, this.form.password);" />
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Login" onclick="formhash(this.form, this.form.password);" />
         <input class="btn btn-lg btn-primary btn-block" type="button" value="Register" onclick="displayPopUp()" />
         </form>
         
@@ -73,7 +73,7 @@ sec_session_start();
     </div> <!-- /container -->
     <div id="fade" style="display:none;" onclick="closePopUp();"></div>
     <div id="regUser" style="position:relative;margin:auto auto;width:500px;height:460px; top:-250px; text-align:center;background:#d9d9d9;border: 1px solid #c0c0c0;display:none">
-            
+            <div id="err"></div>
             <form class="form-register" role="form" action="functions/register.php" method="post">
                 <h2 class="">Register on Secure Blog!</h2>
                 
@@ -92,7 +92,7 @@ sec_session_start();
                 <input type="password" id="passwordAgain" name="passwordAgain" class="form-control" placeholder="Password Again" required>
                 
                 <div style="margin-top:15px;display:table;width:100%">
-                    <input type="date" id="dob" name="dob" style="width:50%;height:42px;display:table-cell;float:left" class="form-control" required>
+                    <input type="date" max="2002-01-01" id="dob" name="dob" style="width:50%;height:42px;display:table-cell;float:left" class="form-control" required>
                 
                     <select id="gender" style="display:table-cell;width:50%;float:right;">
                         <option value="0" style="color:grey;">Choose Gender</option>

@@ -11,9 +11,9 @@ function register($email, $firstname, $lastname, $dob, $gender, $city, $password
 
         $userID = $stmt->insert_id;
 
-        $stmt2 = $mysqli->prepare("INSERT INTO prvlg(user_id,email,www) VALUES(?,?,?);");
+        $stmt2 = $mysqli->prepare("INSERT INTO prvlg(user_id,www) VALUES(?,?);");
 
-        $stmt2->bind_param('iss', $userID, $email, $password);
+        $stmt2->bind_param('is', $userID, $password);
         $stmt2->execute();
         
         return true;
