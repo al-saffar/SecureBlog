@@ -1,4 +1,4 @@
-function registerFormCheck(form, firstname, lastname, mail, password, passwordAgain, dob, gender, city)
+function registerFormCheck(form, firstname, lastname, mail, password, passwordAgain, dob, gender, city, valid)
 {   
     if(firstname === ''
                         || lastname.value === '' 
@@ -24,7 +24,10 @@ function registerFormCheck(form, firstname, lastname, mail, password, passwordAg
         document.getElementById('err').innerHTML = "<div class='alert-warning' style='position:absolute;width:100%;height:40px'><label>Invalid email</label></div>";
         return false;
     }
-    
+    if(valid.value === 'false')
+    {
+        return false;
+    }
     if(password.value != passwordAgain.value)
     {   //matching passwords
         document.getElementById('err').innerHTML = "<div class='alert-warning' style='position:absolute;width:100%;height:40px'><label>The passwords doesn't match. please re-enter them</label></div>";
@@ -86,4 +89,19 @@ function registerFormCheck(form, firstname, lastname, mail, password, passwordAg
     passwordAgain.value = "";
     
     form.submit();
+}
+
+function unique_mail(mail){
+    $.post('./functions/check_mail.php', {'mail' : mail.value}, function(data) {
+        if(data === 'true')
+        {
+            document.getElementById('err').innerHTML = "";
+            document.getElementById('valid').value = true;
+        }
+        else
+        {
+            document.getElementById('err').innerHTML = "<div class='alert-warning' style='position:absolute;width:100%;height:40px'><label>This mail is already in use</label></div>";
+            document.getElementById('valid').value = false;
+        }
+    });
 }

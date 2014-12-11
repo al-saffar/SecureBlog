@@ -14,6 +14,7 @@ sec_session_start();
     <link rel="icon" href="../../favicon.ico">
     
     <title>Secure Blog</title>
+    <script type="text/JavaScript" src="js/vendor/jquery-1.11.1.js"></script> 
     <script type="text/JavaScript" src="js/sha512.js"></script> 
     <script type="text/JavaScript" src="js/login_form.js"></script>
     <script type="text/JavaScript" src="js/register_form.js"></script>
@@ -84,7 +85,7 @@ sec_session_start();
                 </div>
                 
                 <label for="mail" class="sr-only">Email address</label>
-                <input type="email" id="mail" class="form-control" name="mail" placeholder="Email address" required>
+                <input type="email" id="mail" class="form-control" name="mail" placeholder="Email address" onchange="unique_mail(this.form.mail);" required>
                 
                 <label for="password" class="sr-only">Password</label>
                 <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
@@ -114,8 +115,8 @@ sec_session_start();
                         <option value="2">København</option>
                     </select>
                 </div>
-                
-                <input class="btn btn-lg btn-primary btn-block" style="margin-top:15px;" type="button" value="Register" onclick="registerFormCheck(this.form, this.form.firstname, this.form.lastname, this.form.mail, this.form.password, this.form.passwordAgain, this.form.dob, this.form.gender, this.form.city);" />
+                <input type="hidden" id="valid" name="valid" value="false" />
+                <input class="btn btn-lg btn-primary btn-block" style="margin-top:15px;" type="button" value="Register" onclick="registerFormCheck(this.form, this.form.firstname, this.form.lastname, this.form.mail, this.form.password, this.form.passwordAgain, this.form.dob, this.form.gender, this.form.city, this.form.valid);" />
             </form>
             
         </div>
