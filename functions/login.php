@@ -9,7 +9,9 @@ if (isset($_POST['mail'], $_POST['token'])) {
     //save in vars
     $mail = filter_input(INPUT_POST, 'mail', FILTER_SANITIZE_EMAIL);
     $password = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
-    $pass = hash("SHA512", $password.$mail);
+    
+    $salt = hash("SHA512", $mail);
+    $pass = hash("SHA512", $password.$salt);
     //try to login
     if (login($mail, $pass, $mysqli) > -1) {
         // if logget in go to next page

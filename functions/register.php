@@ -12,7 +12,8 @@ if (isset($_POST['firstname'],$_POST['lastname'],$_POST['mail'],$_POST['token'],
     $gender = filter_input(INPUT_POST, 'gen', FILTER_SANITIZE_NUMBER_INT);
     $city = filter_input(INPUT_POST, 'cit', FILTER_SANITIZE_NUMBER_INT);
     
-    $pass = hash("SHA512", $password.$email);
+    $salt = hash("SHA512", $email);
+    $pass = hash("SHA512", $password.$salt);
     if(register($email, $firstname, $lastname, $dob, $gender, $city, $pass, $mysqli))
     {
         header('Location: ../index.php?success=1');
