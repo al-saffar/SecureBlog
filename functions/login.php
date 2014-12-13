@@ -7,8 +7,8 @@ sec_session_start(); // start secure session
 if (isset($_POST['mail'], $_POST['token'])) {
     
     //save in vars
-    $mail = $_POST['mail'];
-    $password = $_POST['token'];
+    $mail = filter_input(INPUT_POST, 'mail', FILTER_SANITIZE_EMAIL);
+    $password = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
     $pass = hash("SHA512", $password.$mail);
     //try to login
     if (login($mail, $pass, $mysqli) > -1) {

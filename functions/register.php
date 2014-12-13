@@ -4,13 +4,13 @@ include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/sql/registrationMapper.ph
 
 if (isset($_POST['firstname'],$_POST['lastname'],$_POST['mail'],$_POST['token'],$_POST['dob'],$_POST['gen'], $_POST['cit'])) {
 
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $email = $_POST['mail'];
-    $password = $_POST['token'];
-    $dob = $_POST['dob'];
-    $gender = $_POST['gen']; 
-    $city = $_POST['cit'];
+    $firstname = filter_input(INPUT_POST, 'firstname', FILTER_SANITIZE_STRING);
+    $lastname = filter_input(INPUT_POST, 'lastname', FILTER_SANITIZE_STRING);
+    $email = filter_input(INPUT_POST, 'mail', FILTER_SANITIZE_EMAIL);
+    $password = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
+    $dob = filter_input(INPUT_POST, 'dob', FILTER_SANITIZE_STRING);
+    $gender = filter_input(INPUT_POST, 'gen', FILTER_SANITIZE_NUMBER_INT);
+    $city = filter_input(INPUT_POST, 'cit', FILTER_SANITIZE_NUMBER_INT);
     
     $pass = hash("SHA512", $password.$email);
     if(register($email, $firstname, $lastname, $dob, $gender, $city, $pass, $mysqli))
@@ -24,13 +24,6 @@ if (isset($_POST['firstname'],$_POST['lastname'],$_POST['mail'],$_POST['token'],
 else
 {
     echo "REQUEST DENIED";
-    echo $_POST['firstname'];
-    echo $_POST['lastname'];
-    echo $_POST['mail'];
-    echo $_POST['p'];
-    echo $_POST['dob'];
-    echo $_POST['gen'];
-    echo $_POST['cit'];
 }
 
 ?>

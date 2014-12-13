@@ -18,7 +18,7 @@ function registerFormCheck(form, firstname, lastname, mail, password, passwordAg
         document.getElementById('err').innerHTML = "<div class='alert-warning' style='position:absolute;width:100%;height:40px'><label>Invalid name</label></div>";
         return false;
     }
-    var re = /^\w+[@]\w+[.][a-z]+$/;
+    var re = /^[a-zA-Z0-9]+[a-zA-Z0-9.]*[a-zA-Z0-9]+[@]\w+[.][a-z]+$/;
     if(!re.test(mail.value))
     {   //email check
         document.getElementById('err').innerHTML = "<div class='alert-warning' style='position:absolute;width:100%;height:40px'><label>Invalid email</label></div>";

@@ -4,7 +4,7 @@ include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/sql/registrationMapper.ph
 
 if(isset($_POST['mail']))
 {
-    $mail = $_POST['mail'];
+    $mail = filter_input(INPUT_POST, 'mail', FILTER_SANITIZE_EMAIL);
     if(unique_mail($mail, $mysqli))
     {
         echo 'true';
