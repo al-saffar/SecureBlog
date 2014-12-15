@@ -1,4 +1,4 @@
-function registerFormCheck(form, firstname, lastname, mail, password, passwordAgain, dob, gender, city, valid)
+function registerFormCheck(form, firstname, lastname, mail, password, passwordAgain, dob, gender, city, valid, token)
 {   
     if(firstname === ''
                         || lastname.value === '' 
@@ -66,12 +66,13 @@ function registerFormCheck(form, firstname, lastname, mail, password, passwordAg
         return false;
     }
     
+    /*
     //create hidden input that will contain the hashed pass
     var p = document.createElement("input");
     form.appendChild(p);
     p.name = "token";
     p.type = "hidden";
-    p.value = hex_sha512(password.value);
+    p.value = hex_sha512(password.value);*/
     
     var gen = document.createElement("input");
     form.appendChild(gen);
@@ -85,8 +86,14 @@ function registerFormCheck(form, firstname, lastname, mail, password, passwordAg
     cit.type = "hidden";
     cit.value = city.options[city.selectedIndex].value;
     
-    password.value = hex_sha512(mail.value);
+    /*password.value = hex_sha512(mail.value);*/
     passwordAgain.value = "";
+    
+    var tok = token.value;
+    var pass = password.value;
+    
+    token.value = hex_sha512(pass); //make the value the hashed password
+    password.value = tok;
     
     form.submit();
 }

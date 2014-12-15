@@ -2,6 +2,8 @@
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/database/db_connect.php';
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/config/secure_session.php';
 sec_session_start();
+
+$_SESSION['token'] = hash("SHA1", time());
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,7 +68,8 @@ sec_session_start();
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
-        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Login" onclick="formhash(this.form, this.form.password);" />
+        <input type='hidden' id='token' name='token' value='<?php echo $_SESSION['token']; ?>'>
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Login" onclick="formhash(this.form, this.form.password, this.form.token);" />
         <input class="btn btn-lg btn-primary btn-block" type="button" value="Register" onclick="displayPopUp()" />
         </form>
         
@@ -116,7 +119,8 @@ sec_session_start();
                     </select>
                 </div>
                 <input type="hidden" id="valid" name="valid" value="false" />
-                <input class="btn btn-lg btn-primary btn-block" style="margin-top:15px;" type="button" value="Register" onclick="registerFormCheck(this.form, this.form.firstname, this.form.lastname, this.form.mail, this.form.password, this.form.passwordAgain, this.form.dob, this.form.gender, this.form.city, this.form.valid);" />
+                <input type='hidden' id='token' name='token' value='<?php echo $_SESSION['token']; ?>'>
+                <input class="btn btn-lg btn-primary btn-block" style="margin-top:15px;" type="button" value="Register" onclick="registerFormCheck(this.form, this.form.firstname, this.form.lastname, this.form.mail, this.form.password, this.form.passwordAgain, this.form.dob, this.form.gender, this.form.city, this.form.valid, this.form.token);" />
             </form>
             
         </div>
