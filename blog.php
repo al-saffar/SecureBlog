@@ -2,9 +2,15 @@
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/database/db_connect.php';
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/config/secure_session.php';
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/sql/blogMapper.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/sql/loginMapper.php';
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/classes/post.php';
 
 sec_session_start();
+
+if(!login_check($mysqli))
+{
+    header('Location: index.php');
+}
 
 $posts = getPosts($mysqli);
 ?>
@@ -47,14 +53,28 @@ $posts = getPosts($mysqli);
     <div class="container">
 
       <div class="blog-header">
-        <h1 class="blog-title">The Bootstrap Blog</h1>
-        <p class="lead blog-description">The official example template of creating a blog with Bootstrap.</p>
+          
       </div>
 
       <div class="row">
 
         <div class="col-sm-8 blog-main">
-
+        <div class="blog-post" style='padding:5px;'>
+            <form action="functions/post.php" method="POST" enctype="multipart/form-data">
+                
+                <textarea id="new_post" name="new_post" rows="1" style="max-width:100%;min-width:100%;resize:none;" placeholder="What's on your mind?" onclick="expand_post_area()" onblur="collapse_post_area()"></textarea>
+                <div style='display:table;'>
+                  <div style="display:table-cell;width:100%;">
+                      <input type='file' id='post_image' name='post_image'/>
+                      <input type="hidden" name="MAX_FILE_SIZE" value="50000" />
+                  </div>
+                  <div style='display:table-cell;'>
+                      <input type='submit' name='submit_post' value='Post'/>
+                  </div>
+                </div>
+            </form>
+        </div>
+        
         <?php 
             if($posts != NULL)
             {
@@ -72,7 +92,15 @@ $posts = getPosts($mysqli);
                             </div>
                             <div>
                                 <div class='blog-post-body'>
-                                    <?php echo $post->getPost(); ?>
+                                    <?php 
+                                        echo $post->getPost(); 
+                                        if($post->getHasImage() == 1)
+                                        {
+                                            $image = $post->getPath();
+                                            echo "<img src='assets/uploads/$image' style='width:100%'/>";
+                                        }
+                                    ?>
+                                   
                                 </div>
                             </div>
                             <div style='width:100%;text-align:right;padding-right:15px;border-top:1px solid #e1e1e1'>
@@ -83,7 +111,6 @@ $posts = getPosts($mysqli);
                 }
             }
         ?>
-
           <nav>
             <ul class="pager">
               <li><a href="#">Previous</a></li>
@@ -95,33 +122,12 @@ $posts = getPosts($mysqli);
 
         <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
           <div class="sidebar-module sidebar-module-inset">
-            <h4>About</h4>
-            <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+            <h4>Your Ad HERE</h4>
+            <p>Do you want to advertise on the most Secure blog ever? <br>Then what are you waiting for?<br><br>Contact us and lets work out the details</p>
           </div>
-          <div class="sidebar-module">
-            <h4>Archives</h4>
-            <ol class="list-unstyled">
-              <li><a href="#">March 2014</a></li>
-              <li><a href="#">February 2014</a></li>
-              <li><a href="#">January 2014</a></li>
-              <li><a href="#">December 2013</a></li>
-              <li><a href="#">November 2013</a></li>
-              <li><a href="#">October 2013</a></li>
-              <li><a href="#">September 2013</a></li>
-              <li><a href="#">August 2013</a></li>
-              <li><a href="#">July 2013</a></li>
-              <li><a href="#">June 2013</a></li>
-              <li><a href="#">May 2013</a></li>
-              <li><a href="#">April 2013</a></li>
-            </ol>
-          </div>
-          <div class="sidebar-module">
-            <h4>Elsewhere</h4>
-            <ol class="list-unstyled">
-              <li><a href="#">GitHub</a></li>
-              <li><a href="#">Twitter</a></li>
-              <li><a href="#">Facebook</a></li>
-            </ol>
+          <div class="sidebar-module sidebar-module-inset">
+            <h4>Your Ad HERE</h4>
+            <p>Do you want to advertise on the most Secure blog ever? <br>Then what are you waiting for?<br><br>Contact us and lets work out the details</p>
           </div>
         </div><!-- /.blog-sidebar -->
 
@@ -130,7 +136,7 @@ $posts = getPosts($mysqli);
     </div><!-- /.container -->
 
     <footer class="blog-footer">
-      <p>Blog template built for <a href="http://getbootstrap.com">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+      <p>CopyRight (c) Secure Blog Co. 2014-2060</p>
       <p>
         <a href="#">Back to top</a>
       </p>
@@ -141,6 +147,19 @@ $posts = getPosts($mysqli);
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+    function expand_post_area()
+    {
+        $('#new_post').attr('rows','4');
+    }
+    function collapse_post_area()
+    {
+        if($('#new_post').val().length < 1)
+        {
+            $('#new_post').attr('rows','1');
+        }
+    }
+    </script>
 <!--    <script src="../../dist/js/bootstrap.min.js"></script>
     <script src="../../assets/js/docs.min.js"></script> -->
   </body>

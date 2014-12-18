@@ -4,6 +4,16 @@ include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/config/secure_session.php
 //login method with prepare statement and check agains bruteforce
 function login($mail, $password, $mysqli) {
     $type = -1;
+    
+    //get IP
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+    
     if($stmt = $mysqli->prepare("SELECT u.id, u.firstname, u.lastname, u.type FROM users u, prvlg p WHERE u.id = p.user_id AND u.email = ? AND p.www = ?;"))
     {
         $stmt->bind_param('ss', $mail, $password);
@@ -12,15 +22,8 @@ function login($mail, $password, $mysqli) {
         
         $stmt->bind_result($userID, $firstname, $lastname, $type);
         $stmt->fetch();
+         
         
-        //get IP
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
         
         if($stmt->num_rows == 1)
         {
@@ -59,10 +62,14 @@ function login($mail, $password, $mysqli) {
             // password is not correct and save login attempts on db, to protect against bruteforce
             $now = time(); //get current time in seconds
             
-            $mysqli->query("INSERT INTO login_attempts(ip, email, time)
-                            VALUES ('$ip', '$mail' , '$now')");
+            $mysqli->query("INSERT INTO `sbdb`.`login_attempts` (`id`, `ip`, `email`, `time`, `timestamp`) VALUES (NULL, '$ip', '$mail', '$now', CURRENT_TIMESTAMP);");
             return -1;
         }
+    }
+    else {
+        $mysqli->query("INSERT INTO logger(ip, mail, komm)
+                        VALUES ('$ip', '$mail' ,'login')");
+        return -1;
     }
 }
 
@@ -94,7 +101,6 @@ function login_check($mysqli) {
     
     //are the session variables set
     if (isset($_SESSION['userID'], $_SESSION['login_string'])) {
- 
         //get them
         $userID = $_SESSION['userID'];
         $login_string = $_SESSION['login_string'];
@@ -103,12 +109,12 @@ function login_check($mysqli) {
         $user_browser = $_SERVER['HTTP_USER_AGENT'];
  
         //get password for that user
-        if ($stmt = $mysqli->prepare("SELECT www FROM prvlg WHERE userID = ? LIMIT 1")) {
+        if ($stmt = $mysqli->prepare("SELECT www FROM prvlg WHERE user_id = ? LIMIT 1")) {
            
             $stmt->bind_param('i', $userID);
             $stmt->execute(); 
             $stmt->store_result();
- 
+            
             if ($stmt->num_rows == 1) {
                 
                 //if the user exist save password in variable

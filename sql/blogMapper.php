@@ -22,7 +22,10 @@ function getPosts($mysqli)
         $stmt->bind_result($postID, $poster, $has_image, $path, $post, $time, $firstname, $lastname);
 
         while ($stmt->fetch()) {
-            $p = new post($postID, $poster, $firstname, $lastname, $post, $time, $has_image, $path);
+            $po = htmlentities($post);
+            $po = nl2br($po);
+            $po = "<pre>$po</pre>";
+            $p = new post($postID, $poster, $firstname, $lastname, $po, $time, $has_image, $path);
             
             $posts[] = $p;
         }
@@ -32,5 +35,22 @@ function getPosts($mysqli)
     else
     {
         return NULL;
+    }
+}
+
+function uploadPost($mysqli, $post, $has_image = 0, $image_path = "")
+{
+    try{
+        $stmt = $mysqli->prepare("INSERT INTO posts(poster_id,has_image,path,post_text) VALUES(?,?,?,?);");
+
+        $user_id = $_SESSION['userID'];
+        $stmt->bind_param('iiss', $user_id, $has_image, $image_path, $post);
+        $stmt->execute();
+
+        return true;
+    }
+    catch (Exception $e)
+    {
+        return false;
     }
 }
