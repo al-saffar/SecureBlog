@@ -1,6 +1,8 @@
 <?php
-require_once ('./config/autoLoader.php');
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/database/db_connect.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/config/secure_session.php'; 
 sec_session_start();
+$_SESSION['token'] = hash("SHA1", time());
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,8 +15,9 @@ sec_session_start();
     <link rel="icon" href="../../favicon.ico">
     
     <title>Admin</title>
-    <script type="text/JavaScript" src="js/sha512.js"></script> 
-    <script type="text/JavaScript" src="js/login_form.js"></script>
+    <script type="text/JavaScript" src="../js/vendor/jquery-1.11.1.js"></script> 
+    <script type="text/JavaScript" src="../js/sha512.js"></script> 
+    <script type="text/JavaScript" src="../js/login_form.js"></script>
     
     <!-- Bootstrap core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -51,7 +54,8 @@ sec_session_start();
         <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
         <div class="checkbox">
         </div>
-        <input class="btn btn-lg btn-primary btn-block" type="button" value="Login" onclick="formhash(this.form, this.form.password);" />
+        <input type='hidden' id='token' name='token' value='<?php echo $_SESSION['token']; ?>'>
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Login" onclick="formhash(this.form, this.form.password, this.form.token);" />
         </form>
        
     </div> <!-- /container -->

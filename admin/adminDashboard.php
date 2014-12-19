@@ -1,5 +1,14 @@
 <?php
-require_once ('./config/autoLoader.php');
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/database/db_connect.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/config/secure_session.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/admin/functions/encryptDecrypt.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'../SecureBlog/sql/loginMapper.php';
+
+sec_session_start();
+if(!login_check($mysqli))
+{
+    header('Location: ../index.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +20,7 @@ require_once ('./config/autoLoader.php');
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Dashboard Template for Bootstrap</title>
+    <title>Admin - SecureBlog</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -38,7 +47,8 @@ require_once ('./config/autoLoader.php');
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+            <a class="navbar-brand" href="#">Admin - <?php print_r(decrypt($_SESSION ['adminLogin'], $_SERVER['REMOTE_ADDR'])); ?>
+            <?php  print_r('IP -'.$_SERVER['REMOTE_ADDR']); ?></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -48,7 +58,7 @@ require_once ('./config/autoLoader.php');
             <li><a href="#">Help</a></li>
           </ul>
           <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
+            <input type="text" class="form-control" placeholder="Search for users...">
           </form>
         </div>
       </div>
@@ -102,133 +112,50 @@ require_once ('./config/autoLoader.php');
             </div>
           </div>
 
-          <h2 class="sub-header">Section title</h2>
+          <h2 class="sub-header">Users</h2>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
+                  <th>ID</th>
+                  <th>mail</th>
+                  <th>Firstname</th>
+                  <th>Lastname</th>
+                  <th>Type</th>
+                  <th>DOB</th>
+                  <th>PW</th>
+                  <th>Timestamp</th>
+                  
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>1,001</td>
+                    <td><input type="checkbox" name="checkbox" value=""></td>
+                  <td>1</td>
                   <td>Lorem</td>
+                  <td>ipsum</td>
+                  <td>dolor</td>
+                  <td>sit</td>
                   <td>ipsum</td>
                   <td>dolor</td>
                   <td>sit</td>
                 </tr>
                 <tr>
-                  <td>1,002</td>
+                    <td><input type="checkbox" name="checkbox" value=""></td>
+                  <td>2</td>
                   <td>amet</td>
                   <td>consectetur</td>
                   <td>adipiscing</td>
                   <td>elit</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>Integer</td>
-                  <td>nec</td>
-                  <td>odio</td>
-                  <td>Praesent</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>libero</td>
-                  <td>Sed</td>
-                  <td>cursus</td>
-                  <td>ante</td>
-                </tr>
-                <tr>
-                  <td>1,004</td>
-                  <td>dapibus</td>
-                  <td>diam</td>
-                  <td>Sed</td>
-                  <td>nisi</td>
-                </tr>
-                <tr>
-                  <td>1,005</td>
-                  <td>Nulla</td>
-                  <td>quis</td>
-                  <td>sem</td>
-                  <td>at</td>
-                </tr>
-                <tr>
-                  <td>1,006</td>
-                  <td>nibh</td>
-                  <td>elementum</td>
-                  <td>imperdiet</td>
-                  <td>Duis</td>
-                </tr>
-                <tr>
-                  <td>1,007</td>
-                  <td>sagittis</td>
                   <td>ipsum</td>
-                  <td>Praesent</td>
-                  <td>mauris</td>
+                  <td>dolor</td>
+                  <td>sit</td>
                 </tr>
-                <tr>
-                  <td>1,008</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>1,009</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
-                  <td>Mauris</td>
-                </tr>
-                <tr>
-                  <td>1,010</td>
-                  <td>massa</td>
-                  <td>Vestibulum</td>
-                  <td>lacinia</td>
-                  <td>arcu</td>
-                </tr>
-                <tr>
-                  <td>1,011</td>
-                  <td>eget</td>
-                  <td>nulla</td>
-                  <td>Class</td>
-                  <td>aptent</td>
-                </tr>
-                <tr>
-                  <td>1,012</td>
-                  <td>taciti</td>
-                  <td>sociosqu</td>
-                  <td>ad</td>
-                  <td>litora</td>
-                </tr>
-                <tr>
-                  <td>1,013</td>
-                  <td>torquent</td>
-                  <td>per</td>
-                  <td>conubia</td>
-                  <td>nostra</td>
-                </tr>
-                <tr>
-                  <td>1,014</td>
-                  <td>per</td>
-                  <td>inceptos</td>
-                  <td>himenaeos</td>
-                  <td>Curabitur</td>
-                </tr>
-                <tr>
-                  <td>1,015</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
+               
               </tbody>
             </table>
+               <input class="btn btn-danger" type="button" value="DELETE" >
           </div>
         </div>
       </div>
