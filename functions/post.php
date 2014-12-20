@@ -3,11 +3,12 @@ include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/database/db_connect.php';
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/sql/blogMapper.php';
 sec_session_start(); // start secure session
 
-if(isset($_POST['new_post']))
+if(isset($_POST['new_post']) && isset($_POST['token']))
 {
     $post = $_POST['new_post'];
+    $token = $_POST['token'];
     
-    if(strlen($post) > 0)
+    if(strlen($post) > 0 && $token == $_SESSION['token'])
     {
         $imageIsSet = 0;
         $image_path = "";

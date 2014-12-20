@@ -13,6 +13,8 @@ if(!login_check($mysqli))
 }
 
 $posts = getPosts($mysqli);
+
+$_SESSION['token'] = hash("SHA1", time());
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,6 +71,7 @@ $posts = getPosts($mysqli);
                       <input type="hidden" name="MAX_FILE_SIZE" value="50000" />
                   </div>
                   <div style='display:table-cell;'>
+                      <input type='hidden' id='token' name='token' value='<?php echo $_SESSION['token']; ?>'>
                       <input type='submit' name='submit_post' value='Post'/>
                   </div>
                 </div>
@@ -206,7 +209,7 @@ $posts = getPosts($mysqli);
                     });
                     
                     $('#delete_post_<?php echo $post->getPostID(); ?>').on("click", function(){
-                        window.location = "functions/delete_post.php?id=<?php echo $post->getPostID(); ?>";
+                        window.location = "functions/delete_post.php?id=<?php echo $post->getPostID(); ?>&token=<?php echo $_SESSION['token']; ?>";
                     });
                     
                     <?php
@@ -218,7 +221,8 @@ $posts = getPosts($mysqli);
     function load_comments(postID)
     {
         $("#comment_section_"+postID+"").html("");
-        $.post('./functions/load_comments.php', {'id' : postID}, function(data) {
+        var token = '<?php echo $_SESSION['token']; ?>';
+        $.post('./functions/load_comments.php', {'id' : postID, 'token' : token}, function(data) {
             var res = data.split("|");
             
             for(i = 0; i < res.length; i++)
@@ -228,7 +232,7 @@ $posts = getPosts($mysqli);
                 com[0] = com[0].replace(/string\([0-9]+\) "/i, "");
                 
                 var strTest = com[1];
-                if(strTest.indexOf("undefined") == -1)
+                if(strTest && strTest.indexOf("undefined") == -1)
                 {
                     $("#comment_section_"+postID+"").html($("#comment_section_"+postID+"").html()+""+com[0]+": "+com[1]+"<br>");
                 }
@@ -237,7 +241,8 @@ $posts = getPosts($mysqli);
     }
     
     function post_comment(postID, comment){
-        $.post('./functions/post_comment.php', {'post_id' : postID, 'comment' : comment}, function(data) {
+        var token = '<?php echo $_SESSION['token']; ?>';
+        $.post('./functions/post_comment.php', {'post_id' : postID, 'comment' : comment, 'token' : token}, function(data) {
             load_comments(postID);
         });
     }
