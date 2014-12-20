@@ -3,6 +3,7 @@ include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/database/db_connect.php';
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/sql/registrationMapper.php';
 sec_session_start();
 
+//for registering the user
 if (isset($_POST['firstname'],$_POST['lastname'],$_POST['mail'],$_POST['token'],$_POST['dob'],$_POST['gen'], $_POST['cit'], $_POST['password'])) {
 
     $firstname = filter_input(INPUT_POST, 'firstname', FILTER_SANITIZE_STRING);

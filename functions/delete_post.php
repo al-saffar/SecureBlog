@@ -6,14 +6,14 @@ sec_session_start();
 
 if(isset($_GET['id']) && isset($_GET['token']))
 {
-    $post_id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-    $user_id = $_SESSION['userID'];
+    $post_id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT); //sanitize
+    $user_id = $_SESSION['userID']; //get user ID from session
     
-    $token = $_GET['token'];
+    $token = $_GET['token']; //get token
     
-    if($token == $_SESSION['token'] && i_am_owner_of_post($mysqli, $post_id, $user_id))
+    if($token == $_SESSION['token'] && i_am_owner_of_post($mysqli, $post_id, $user_id)) //check if token is alright and the user is the owner of this post
     {
-        if(deletePost($mysqli, $post_id))
+        if(deletePost($mysqli, $post_id)) //delete it
         {
             header("Location: ../blog.php?success=2");
         }

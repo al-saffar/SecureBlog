@@ -10,6 +10,7 @@ function getPosts($mysqli)
     
     // SELECT p.* FROM `friends` f, `posts` p WHERE `friend2_id` = 28 AND f.`friend1_id` = p.`poster_id` UNION SELECT p.* FROM `friends` f, `posts` p WHERE `friend1_id` = 28 AND f.`friend2_id` = p.`poster_id` ORDER BY `timestamp` DESC LIMIT 10
     
+    //very long sql statement, that loads every posts: the users and his friends'
     if ($stmt = $mysqli->prepare("SELECT p.*, u.`firstname`, u.`lastname` FROM `friends` f, `posts` p, `users` u WHERE `friend2_id` = ? AND f.`friend1_id` = p.`poster_id` AND p.`poster_id` = u.`id` UNION "
             . "                   SELECT p.*, u.`firstname`, u.`lastname` FROM `friends` f, `posts` p, `users` u WHERE `friend1_id` = ? AND f.`friend2_id` = p.`poster_id` AND p.`poster_id` = u.`id`  UNION "
             . "                   SELECT p.*, u.`firstname`, u.`lastname` FROM `posts` p, `users` u WHERE p.`poster_id` = ? AND p.`poster_id` = u.`id`  ORDER BY `timestamp` DESC LIMIT 10")) 
@@ -21,13 +22,14 @@ function getPosts($mysqli)
  
         $stmt->bind_result($postID, $poster, $has_image, $path, $post, $time, $firstname, $lastname);
 
+        //go through all the posts
         while ($stmt->fetch()) {
-            $po = htmlentities($post);
-            $po = nl2br($po);
+            $po = htmlentities($post); //against XSS
+            $po = nl2br($po); //make the newlines visible on the site
             $po = "<pre>$po</pre>";
-            $p = new post($postID, $poster, $firstname, $lastname, $po, $time, $has_image, $path);
+            $p = new post($postID, $poster, $firstname, $lastname, $po, $time, $has_image, $path); //save the post on a new object
             
-            $posts[] = $p;
+            $posts[] = $p; //put it in a array
         }
         
         return $posts;
@@ -41,6 +43,7 @@ function getPosts($mysqli)
 function uploadPost($mysqli, $post, $has_image = 0, $image_path = "")
 {
     try{
+        //save the post on the DB
         $stmt = $mysqli->prepare("INSERT INTO posts(poster_id,has_image,path,post_text) VALUES(?,?,?,?);");
 
         $user_id = $_SESSION['userID'];
@@ -55,6 +58,7 @@ function uploadPost($mysqli, $post, $has_image = 0, $image_path = "")
     }
 }
 
+//checks if the user is the owner for the post (used when trying to delete an post)
 function i_am_owner_of_post($mysqli, $post_id, $user_id)
 {
     if ($stmt = $mysqli->prepare("SELECT id FROM posts WHERE id = ? AND poster_id = ?")) {
@@ -71,6 +75,7 @@ function i_am_owner_of_post($mysqli, $post_id, $user_id)
     }
 }
 
+//deletes post and all its comments
 function deletePost($mysqli, $post_id)
 {
     try{
@@ -92,6 +97,7 @@ function deletePost($mysqli, $post_id)
     }
 }
 
+//save comment on DB
 function postComment($mysqli, $post_id, $comment, $commenter)
 {
     try{
@@ -108,6 +114,7 @@ function postComment($mysqli, $post_id, $comment, $commenter)
     }
 }
 
+//get all comments
 function get_comments($mysqli, $post_id)
 {
     $comms = "";

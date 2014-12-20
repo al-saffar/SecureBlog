@@ -1,4 +1,8 @@
 <?php
+/*
+ * The loaded posts are saved in this class, to make it easier to handle
+ */
+
 class post {
     private $postID;
     private $posterID;

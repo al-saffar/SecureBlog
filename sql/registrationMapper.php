@@ -3,7 +3,7 @@ include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/config/secure_session.php
 
 function register($email, $firstname, $lastname, $dob, $gender, $city, $password, $mysqli)
 {
-    if(unique_mail($email, $mysqli))
+    if(unique_mail($email, $mysqli)) //make sure the mail is unique
     {
         try{
             $stmt = $mysqli->prepare("INSERT INTO users(email,firstname,lastname,DOB,gender,city_id) VALUES(?,?,?,?,?,?);");
@@ -31,6 +31,7 @@ function register($email, $firstname, $lastname, $dob, $gender, $city, $password
     }
 }
 
+//makes sure the mail is unique, so the user can register
 function unique_mail($mail, $mysqli)
 {
     if($stmt = $mysqli->prepare("SELECT email FROM users WHERE email = ?"))

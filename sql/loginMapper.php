@@ -78,7 +78,7 @@ function checkbrute($ip, $mail, $mysqli) {
     // get current time in secs
     $now = time();
  
-    // block in 5 min
+    // block for 30 min
     $valid_attempts = $now - (30 * 60);
  
     if ($stmt = $mysqli->prepare("SELECT time FROM login_attempts WHERE ip = ? AND mail = ? AND time > '$valid_attempts'")) {
