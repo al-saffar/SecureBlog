@@ -86,8 +86,14 @@ $posts = getPosts($mysqli);
                                 <div class='blog-post-head' style='float:left;display:table-cell;'>
                                     <?php echo $post->getPosterName(); ?> says: 
                                 </div>
-                                <div style='float:right;padding-right:10px;font-size:12px;display:table-cell;'>
+                                <div style='float:right;font-size:12px;<?php echo ($post->getPosterID() != $_SESSION['userID'] ? "padding-right:20px;" : "") ?>display:table-cell;'>
                                     <?php echo $post->getTime(); ?>
+                                    <?php 
+                                    if($post->getPosterID() == $_SESSION['userID'])
+                                    {
+                                        echo "<a id='delete_post_".$post->getPostID()."' style='cursor:pointer;'>[X]</a>";
+                                    }
+                                    ?>
                                 </div>
                             </div>
                             <div>
@@ -104,7 +110,16 @@ $posts = getPosts($mysqli);
                                 </div>
                             </div>
                             <div style='width:100%;text-align:right;padding-right:15px;border-top:1px solid #e1e1e1'>
-                                <a>comments</a>
+                                <a id='comment_click_<?php echo $post->getPostID(); ?>' style="cursor:pointer;">comments</a>
+                            </div>
+                            <div id='comments_<?php echo $post->getPostID(); ?>' style='width:100%;border-top:1px solid #e1e1e1;display:none;'>
+                                <div style='padding-left:5px;'>Comments</div>
+                                <div style='width:100%;padding-right:5px;padding-left:5px;padding-bottom:5px;'>
+                                    <input id='write_comment_<?php echo $post->getPostID(); ?>' placeholder="Write a comment.." style='width:100%;'/>
+                                </div>
+                                <div id='comment_section_<?php echo $post->getPostID(); ?>'>
+                                    
+                                </div>
                             </div>
                         </div>
                     <?php
@@ -158,6 +173,73 @@ $posts = getPosts($mysqli);
         {
             $('#new_post').attr('rows','1');
         }
+    }
+    
+    $( document ).ready(function() {
+        <?php 
+            if($posts != NULL)
+            {
+                foreach ($posts as $post)
+                {
+                    ?>
+                    
+                    $('#comment_click_<?php echo $post->getPostID(); ?>').on("click", function(){
+                        if($('#comments_<?php echo $post->getPostID(); ?>').css('display') == 'none')
+                        {
+                            $('#comments_<?php echo $post->getPostID(); ?>').css("display", "block");
+                            load_comments(<?php echo $post->getPostID(); ?>);
+                        }
+                        else
+                        {
+                            $('#comments_<?php echo $post->getPostID(); ?>').css("display", "none");
+                        }
+                    });
+                    
+                    $('#write_comment_<?php echo $post->getPostID(); ?>').keyup(function (e) {
+                        if (e.keyCode == 13) {
+                            if($('#write_comment_<?php echo $post->getPostID(); ?>').val() !== "")
+                            {
+                                post_comment(<?php echo $post->getPostID(); ?>,  $('#write_comment_<?php echo $post->getPostID(); ?>').val());
+                                $('#write_comment_<?php echo $post->getPostID(); ?>').val("");
+                            }
+                        }
+                    });
+                    
+                    $('#delete_post_<?php echo $post->getPostID(); ?>').on("click", function(){
+                        window.location = "functions/delete_post.php?id=<?php echo $post->getPostID(); ?>";
+                    });
+                    
+                    <?php
+                }
+            }
+        ?>
+    });
+    
+    function load_comments(postID)
+    {
+        $("#comment_section_"+postID+"").html("");
+        $.post('./functions/load_comments.php', {'id' : postID}, function(data) {
+            var res = data.split("|");
+            
+            for(i = 0; i < res.length; i++)
+            {
+                var com = res[i].split(".");
+                
+                com[0] = com[0].replace(/string\([0-9]+\) "/i, "");
+                
+                var strTest = com[1];
+                if(strTest.indexOf("undefined") == -1)
+                {
+                    $("#comment_section_"+postID+"").html($("#comment_section_"+postID+"").html()+""+com[0]+": "+com[1]+"<br>");
+                }
+            }
+        });
+    }
+    
+    function post_comment(postID, comment){
+        $.post('./functions/post_comment.php', {'post_id' : postID, 'comment' : comment}, function(data) {
+            load_comments(postID);
+        });
     }
     </script>
 <!--    <script src="../../dist/js/bootstrap.min.js"></script>

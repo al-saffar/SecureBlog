@@ -15,9 +15,13 @@ if(isset($_POST['new_post']))
         if(!empty($_FILES["post_image"]['name']))
         {
             $image_path = "".saveImage();
-            if(!empty($image_path))
+            if($image_path !="")
             {
                 $imageIsSet = 1;
+            }
+            else
+            {
+                header("Location: ../blog.php?error=1");
             }
         }
         

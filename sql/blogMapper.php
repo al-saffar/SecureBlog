@@ -54,3 +54,80 @@ function uploadPost($mysqli, $post, $has_image = 0, $image_path = "")
         return false;
     }
 }
+
+function i_am_owner_of_post($mysqli, $post_id, $user_id)
+{
+    if ($stmt = $mysqli->prepare("SELECT id FROM posts WHERE id = ? AND poster_id = ?")) {
+        $stmt->bind_param('ii', $post_id, $user_id);
+ 
+        $stmt->execute();
+        $stmt->store_result();
+        
+        if ($stmt->num_rows == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+function deletePost($mysqli, $post_id)
+{
+    try{
+        $stmt = $mysqli->prepare("DELETE FROM `sbdb`.`comments` WHERE `post_id` = ?");
+
+        $stmt->bind_param('i', $post_id);
+        $stmt->execute();
+        
+        $stmt = $mysqli->prepare("DELETE FROM `sbdb`.`posts` WHERE `id` = ?");
+
+        $stmt->bind_param('i', $post_id);
+        $stmt->execute();
+
+        return true;
+    }
+    catch (Exception $e)
+    {
+        return false;
+    }
+}
+
+function postComment($mysqli, $post_id, $comment, $commenter)
+{
+    try{
+        $stmt = $mysqli->prepare("INSERT INTO `sbdb`.`comments` (`post_id`, `commenter`, `value`) VALUES (?,?,?);");
+
+        $stmt->bind_param('iis', $post_id,$commenter, $comment);
+        $stmt->execute();
+
+        return true;
+    }
+    catch (Exception $e)
+    {
+        return false;
+    }
+}
+
+function get_comments($mysqli, $post_id)
+{
+    $comms = "";
+    if ($stmt = $mysqli->prepare("SELECT u.firstname, u.lastname, c.value FROM comments c, users u WHERE c.`post_id` = ? AND c.`commenter` = u.id ORDER BY c.time DESC LIMIT 10;")) 
+    {
+        $stmt->bind_param('i', $post_id);
+ 
+        $stmt->execute();
+        $stmt->store_result();
+ 
+        $stmt->bind_result($firstname, $lastname, $comment);
+
+        while ($stmt->fetch()) {
+            $comms .= "".$firstname." ".$lastname.".".$comment."|";
+        }
+        
+        return $comms;
+    }
+    else
+    {
+        return NULL;
+    }
+}
