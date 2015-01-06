@@ -2,12 +2,9 @@
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/database/db_connect.php';
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/config/secure_session.php';
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/admin/functions/encryptDecrypt.php';
-//include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/admin/functions/deleteUser.php';
-include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/admin/classes/user.php';
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/admin/classes/loginAttemps.php';
 include_once ''.$_SERVER['DOCUMENT_ROOT'].'../SecureBlog/sql/loginMapper.php';
-include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/admin/sql/usersMapper.php';
-//include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/functions/logout.php';
-
+include_once ''.$_SERVER['DOCUMENT_ROOT'].'/SecureBlog/admin/sql/accesslogMapper.php';
 
 
 sec_session_start();
@@ -16,8 +13,7 @@ if(!login_check($mysqli))
     header('Location: ../index.php');
 }
 
-$allUsers = getUsers($mysqli);
-$alladm = getAdmins($mysqli);
+$allAccesslogs = getAccesslog($mysqli);
 $_SESSION['token'] = hash("SHA1", time());
 ?>
 <!DOCTYPE html>
@@ -59,7 +55,6 @@ $_SESSION['token'] = hash("SHA1", time());
           </button>
             <a class="navbar-brand" href="#">Admin: <?php print_r(decrypt($_SESSION ['adminLogin'], $_SERVER['REMOTE_ADDR'])); ?>
             <?php  print_r('- IP: '.$_SERVER['REMOTE_ADDR']); ?></a>
-            
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -70,7 +65,6 @@ $_SESSION['token'] = hash("SHA1", time());
             <li>   <input class="btn btn-danger" type="submit" value="Logout" ></li>
           </form>
           </ul>
-            
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Search for users...">
           </form>
@@ -82,8 +76,8 @@ $_SESSION['token'] = hash("SHA1", time());
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Users <span class="sr-only">(current)</span></a></li>
-            <li><a href="accesslog.php">Login log</a></li>
+              <li><a href="adminDashboard.php">Users</a></li>
+            <li class="active"><a href="#">Login log <span class="sr-only">(current)</span></a></li>
             <li><a href="#">Analytics</a></li>
             <li><a href="#">Export</a></li>
           </ul>
@@ -104,69 +98,57 @@ $_SESSION['token'] = hash("SHA1", time());
           <h1 class="page-header">Dashboard</h1>
 
           <div class="row placeholders">
-                <?php 
-            if(isset($alladm))
-            {
-                foreach ($alladm as $user)
-                {
-                ?>     
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="../img/admin.jpg" class="img-responsive">
-              <h4>Admin</h4>
-              
-              <span class="text-muted"><?php echo $user->getFirstname(); ?><?php echo ' '.$user->getLastname(); ?></span>
+              <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
             </div>
-         
-             <?php 
-                }
-            }
-                ?>    
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
           </div>
-       
-          <h2 class="sub-header">Users</h2>
+
+          <h2 class="sub-header">Login log</h2>
           <div class="table-responsive">
-              <form action="../admin/functions/deleteUser.php" method="POST">
             <table class="table table-striped">
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>ID</th>
-                  <th>mail</th>
-                  <th>Firstname</th>
-                  <th>Lastname</th>
-                  <th>DOB</th>
-                  <th>Gender</th>
-                  <th>Type</th>
+                  <th>IP</th>
+                  <th>Email</th>
+                  <th>Time</th>
                   <th>Timestamp</th>
                   
                 </tr>
               </thead>
               <tbody>
-                  
                    <?php 
-            if(isset($allUsers))
+            if(isset($allAccesslogs))
             {
-                foreach ($allUsers as $user)
+                foreach ($allAccesslogs as $accessLog)
                 {
-                    $id = $user->getId();
-                    $email = $user->getEmail();
-                    $firstname = $user->getFirstname();
-                    $lastname = $user->getLastname();
-                    $DOB = $user->getDOB();
-                    $gender = $user->getGender();
-                    $type = $user->getType();
-                    $timestamp = $user->getTimestamp();
+                    $ip = $accessLog->getIp();
+                    $email = $accessLog->getEmail();
+                    $time = $accessLog->getTime();
+                    $timestamp = $accessLog->getTimestamp();
                          echo "<tr>
-                             
-                    <td><input type=\"checkbox\" name=\"checkbox\" value=\"$id\"></td>
-                    <td>$id</td>
+                    <td><input type=\"checkbox\" name=\"checkbox\" value=\"\"></td>
+                    <td>$ip</td>
                     <td>$email</td>
-                    <td>$firstname</td>
-                    <td>$lastname</td>
-                    <td>$DOB</td>
-                    <td>$gender</td>
-                    <td>$type</td>
-                    <td>$timestamp;
+                    <td>$time</td>
+                    <td>$timestamp</td>
                 </tr>";
               
             }
@@ -176,9 +158,7 @@ $_SESSION['token'] = hash("SHA1", time());
                
               </tbody>
             </table>
-               <input type='hidden' id='token' name='token' value=<?php$_SESSION['token'];?>
-               <input class="btn btn-danger" type="submit" value="DELETE" >
-               </form>
+               <input class="btn btn-danger" type="button" value="DELETE" >
           </div>
         </div>
       </div>

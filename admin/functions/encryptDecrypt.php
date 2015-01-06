@@ -1,21 +1,19 @@
 <?php
 
-function encrypt($pure_string, $encryption_key) {
-    $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
+function decrypt($data,$key){
+    $iv=pack("H*" , substr($data,0,16));
+    $x =pack("H*" , substr($data,16)); 
+    $res = mcrypt_decrypt(MCRYPT_BLOWFISH, $key, $x , MCRYPT_MODE_CBC, $iv);
+    return $res;
+}
+ 
+function encrypt($data,$key){
+    $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_CBC);
     $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-    $encrypted_string = mcrypt_encrypt(MCRYPT_BLOWFISH, $encryption_key, utf8_encode($pure_string), MCRYPT_MODE_ECB, $iv);
-    return $encrypted_string;
+    $crypttext = mcrypt_encrypt(MCRYPT_BLOWFISH, $key, $data, MCRYPT_MODE_CBC, $iv);
+    return bin2hex($iv . $crypttext);
 }
 
-/**
- * Returns decrypted original string
- */
- function decrypt($encrypted_string, $encryption_key) {
-    $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
-    $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-    $decrypted_string = mcrypt_decrypt(MCRYPT_BLOWFISH, $encryption_key, $encrypted_string, MCRYPT_MODE_ECB, $iv);
-    return $decrypted_string;
-}
 
 
 ?>
