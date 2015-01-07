@@ -2,7 +2,7 @@
 /**
  * The database login info and if we are running on https
  */  
-define("HOST", "localhost");     // The host you want to connect to.
+define("HOST", "localhost");     // The db host we connect to
 define("USER", "SBUR");    // The database username. 
 define("PASSWORD", "WUz9HBjAWsGBYYeZ");    // The database password. 
 define("DATABASE", "sbdb");    // The database name.

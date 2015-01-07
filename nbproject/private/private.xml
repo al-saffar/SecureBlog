@@ -5,6 +5,9 @@
         <group>
             <file>file:/C:/xampp/htdocs/SecureBlog/sql/loginMapper.php</file>
             <file>file:/C:/xampp/htdocs/SecureBlog/index.php</file>
+            <file>file:/C:/xampp/htdocs/SecureBlog/functions/login.php</file>
+            <file>file:/C:/xampp/htdocs/SecureBlog/js/login_form.js</file>
+            <file>file:/C:/xampp/htdocs/SecureBlog/config/secure_session.php</file>
         </group>
     </open-files>
 </project-private>

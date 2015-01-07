@@ -11,24 +11,24 @@ if(isset($_GET['id']) && isset($_GET['token']))
     
     $token = $_GET['token']; //get token
     
-    if($token == $_SESSION['token']) //check if token is alright and the user is the owner of this post
+    if($token == $_SESSION['token'] && i_am_owner_of_post($mysqli, $post_id, $user_id)) //check if token is alright and the user is the owner of this post
     {
-        if(deleteUser($mysqli, $user_id)) //delete it
+        if(deletePost($mysqli, $post_id)) //delete it
         {
-            header("Location: ../adminDashboard.php");
+            header("Location: ../blog.php");
         }
         else
         {
-            header("Location: ../adminDashboard.php");
+            header("Location: ../blog.php");
         }
     }
     else
     {
-        header("Location: ../adminDashboard.php");
+        header("Location: ../blog.php");
     }
 }
 else
 {
-    header("Location: ../adminDashboard.php");
+    header("Location: ../blog.php");
 }
 ?>

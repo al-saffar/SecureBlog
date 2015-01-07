@@ -110,7 +110,6 @@ function login_check($mysqli) {
  
         //get password for that user
         if ($stmt = $mysqli->prepare("SELECT www FROM prvlg WHERE user_id = ? LIMIT 1")) {
-           
             $stmt->bind_param('i', $userID);
             $stmt->execute(); 
             $stmt->store_result();

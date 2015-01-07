@@ -8,13 +8,15 @@ function sec_session_start() {
     // make it http only against XSS
     $httponly = true;
     
-    // if not cookie, the error
+    // check if cookie
     if (ini_set('session.use_only_cookies', 1) === FALSE) {
-        header("Location: ../error.php?err=Could not initiate a safe session (ini_set)");
+        header("Location: ../index.php?error=3");
         exit();
     }
     // get current cookies params.
     $cookieParams = session_get_cookie_params();
+    
+    //set cookie params
     session_set_cookie_params($cookieParams["lifetime"],
         $cookieParams["path"], 
         $cookieParams["domain"], 
@@ -23,7 +25,7 @@ function sec_session_start() {
     
     session_name($session_name);// set session name
     session_start();// start the session 
-    session_regenerate_id(); // generate the session and delete the old one
+    session_regenerate_id(); // generate a new session id
 }
 
 ?>

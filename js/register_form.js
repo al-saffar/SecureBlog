@@ -66,14 +66,6 @@ function registerFormCheck(form, firstname, lastname, mail, password, passwordAg
         return false;
     }
     
-    /*
-    //create hidden input that will contain the hashed pass
-    var p = document.createElement("input");
-    form.appendChild(p);
-    p.name = "token";
-    p.type = "hidden";
-    p.value = hex_sha512(password.value);*/
-    
     var gen = document.createElement("input");
     form.appendChild(gen);
     gen.name = "gen";
@@ -86,7 +78,6 @@ function registerFormCheck(form, firstname, lastname, mail, password, passwordAg
     cit.type = "hidden";
     cit.value = city.options[city.selectedIndex].value;
     
-    /*password.value = hex_sha512(mail.value);*/
     passwordAgain.value = "";
     
     var tok = token.value;
